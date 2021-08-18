@@ -12,7 +12,6 @@ defmodule PentoWeb.WrongLive do
       <h1>Your Score: <%= @score %></h1>
       <h2>
         <%= @message%>
-        It's <%= time() %>
       </h2>
       <h2>
         <%= for n <- 1..10 do %>
@@ -25,9 +24,6 @@ defmodule PentoWeb.WrongLive do
   end
 
   def handle_event("guess", %{"number" => guess} = data, socket) do
-    IO.inspect(data)
-    IO.inspect(socket.assigns.answer, label: "answer??")
-
     {score, message, answer} =
       if guess == "#{socket.assigns.answer}" do
         {socket.assigns.score + 1, "Youre guess: #{guess}. Correct! Here, have a point.",
@@ -38,9 +34,5 @@ defmodule PentoWeb.WrongLive do
       end
 
     {:noreply, assign(socket, message: message, score: score, answer: answer)}
-  end
-
-  def time() do
-    DateTime.utc_now() |> to_string
   end
 end
