@@ -1,10 +1,16 @@
 defmodule PentoWeb.WrongLive do
   use PentoWeb, :live_view
 
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     {:ok,
      socket
-     |> assign(score: 0, message: "Guess a number.", answer: :rand.uniform(10))}
+     |> assign(
+       score: 0,
+       message: "Guess a number.",
+       answer: :rand.uniform(10),
+       user: Pento.Accounts.get_user_by_session_token(session["user_token"]),
+       session_id: session["live_socket_id"]
+     )}
   end
 
   def render(assigns) do
@@ -20,10 +26,14 @@ defmodule PentoWeb.WrongLive do
           </a>
         <% end %>
       </h2>
+      <pre>
+        <%= @user.email %>
+        <%= @session_id %>
+      </pre>
     """
   end
 
-  def handle_event("guess", %{"number" => guess} = data, socket) do
+  def handle_event("guess", %{"number" => guess}, socket) do
     {score, message, answer} =
       if guess == "#{socket.assigns.answer}" do
         {socket.assigns.score + 1, "Youre guess: #{guess}. Correct! Here, have a point.",
