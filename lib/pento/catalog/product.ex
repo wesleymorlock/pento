@@ -3,7 +3,7 @@ defmodule Pento.Catalog.Product do
   import Ecto.Changeset
 
   schema "products" do
-    field :" description", :string
+    field :description, :string
     field :name, :string
     field :sku, :integer
     field :unit_price, :float
@@ -14,8 +14,8 @@ defmodule Pento.Catalog.Product do
   @doc false
   def changeset(product, attrs) do
     product
-    |> cast(attrs, [:name, :" description", :unit_price, :sku])
-    |> validate_required([:name, :" description", :unit_price, :sku])
+    |> cast(attrs, [:name, :description, :unit_price, :sku])
+    |> validate_required([:name, :description, :unit_price, :sku])
     |> unique_constraint(:sku)
   end
 end
